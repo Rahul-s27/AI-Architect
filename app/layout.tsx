@@ -4,8 +4,6 @@ import { GeistSans } from "geist/font/sans"
 import { GeistMono } from "geist/font/mono"
 import { Analytics } from "@vercel/analytics/next"
 import { Suspense } from "react"
-import { AuthProvider } from "@/contexts/AuthContext"
-import { ProfileProvider } from "@/contexts/ProfileContext"
 import Web3ErrorBoundary from "@/components/error-boundary/Web3ErrorBoundary"
 import { ThemeProvider } from "@/components/theme-provider"
 import { ToastProvider } from "@/components/ui/toast-provider"
@@ -47,11 +45,7 @@ export default function RootLayout({
       <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable}`}>
         <ThemeProvider>
           <Web3ErrorBoundary>
-            <AuthProvider>
-              <ProfileProvider>
-                <Suspense fallback={null}>{children}</Suspense>
-              </ProfileProvider>
-            </AuthProvider>
+            <Suspense fallback={null}>{children}</Suspense>
           </Web3ErrorBoundary>
         </ThemeProvider>
         <ToastProvider />

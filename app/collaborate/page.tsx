@@ -1,101 +1,9 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { useAuth } from "@/contexts/AuthContext";
-import { Button } from "@/components/ui/button";
+import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Textarea } from "@/components/ui/textarea";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import {
-  Users,
-  Plus,
-  Search,
-  MessageSquare,
-  Share2,
-  Heart,
-  Eye,
-  Clock,
-  UserPlus,
-  Settings,
-  Bell,
-  Filter,
-  Download,
-  MoreHorizontal,
-  Hammer,
-  Star,
-  MapPin,
-  Phone,
-  Mail,
-  CheckCircle,
-  DollarSign,
-  Calendar,
-  Award,
-  Briefcase,
-} from "lucide-react";
-import { supabase } from "@/lib/supabaseClient";
-import { Navigation } from "@/components/navigation"
-import { MobileNavigation } from "@/components/mobile-navigation";
-import { ProfessionalsService } from "@/lib/services/professionalsService";
-import { ProfessionalCard } from "@/components/professionals/ProfessionalCard";
-import { ContactModal } from "@/components/professionals/ContactModal";
-import { ProfessionalsFilters } from "@/components/professionals/ProfessionalsFilters";
-import type { Professional } from "@/lib/types/professionals";
-
-interface Project {
-  id: string;
-  name: string;
-  description: string;
-  owner_id: string;
-  is_public: boolean;
-  created_at: string;
-  updated_at: string;
-  status?: string;
-  owner?: {
-    id: string;
-    username: string;
-  };
-  members?: {
-    user_id: string;
-    role: string;
-    profiles?: {
-      username: string;
-    };
-  }[];
-}
-
-interface Contractor {
-  id: string;
-  name: string;
- avatar_url?: string;
-  specialty: string;
-  location: string;
-  rating: number;
-  review_count: number;
-  hourly_rate: number;
-  availability: "available" | "busy" | "booked";
-  verified: boolean;
-  completed_projects: number;
-  description: string;
-  skills: string[];
-  portfolio: string[];
-  phone: string;
-  email: string;
-}
-
-interface ProjectBid {
-  id: string;
-  contractor_id: string;
-  project_id: string;
-  amount: number;
-  timeline: string;
-  proposal: string;
-  status: "pending" | "accepted" | "rejected";
+import { Button } from "@/components/ui/button";
+import { Users, MessageSquare, Share2, Calendar, Star, Lock } from "lucide-react";
   submitted_at: string;
   contractor?: Contractor;
   project?: {
@@ -116,7 +24,6 @@ interface Activity {
 }
 
 export default function Collaborate() {
-  const { user, profile, loading } = useAuth();
   const router = useRouter();
   const [projects, setProjects] = useState<Project[]>([]);
   const [contractors] = useState<Contractor[]>([]);

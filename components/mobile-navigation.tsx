@@ -3,7 +3,6 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useState } from "react"
-import { Button } from "@/components/ui/button"
 import {
   Home,
   Wand2,
@@ -14,7 +13,6 @@ import {
   MessageCircle,
   Users,
   BarChart3,
-  User,
   Mountain,
   Calculator,
   Palette,
@@ -26,7 +24,6 @@ import {
   MoreHorizontal,
 } from "lucide-react"
 import { ThemeToggle } from "@/components/theme-toggle"
-import { useAuth } from "@/contexts/AuthContext"
 import { cn } from "@/lib/utils"
 
 const navigation = [
@@ -57,7 +54,6 @@ const bottomTabs = [
 
 export function MobileNavigation() {
   const pathname = usePathname()
-  const { user, signOut } = useAuth()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isMoreMenuOpen, setIsMoreMenuOpen] = useState(false)
 
@@ -67,11 +63,6 @@ export function MobileNavigation() {
     setIsMoreMenuOpen(false)
   }
 
-  const handleSignOut = async () => {
-    await signOut()
-    setIsMenuOpen(false)
-  }
-
   const handleMoreClick = () => {
     setIsMoreMenuOpen(!isMoreMenuOpen)
   }
@@ -79,22 +70,20 @@ export function MobileNavigation() {
   return (
     <>
       {/* Mobile Header */}
-      <header className="md:hidden fixed top-0 left-0 right-0 z-50 bg-background border-b border-border">
-        <div className="flex h-16 items-center justify-between px-4">
-          <div className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
-              <Cube className="h-5 w-5 text-primary-foreground" />
+      <header className="md:hidden fixed top-0 left-0 right-0 z-50 bg-background border-b border-border shadow-lg">
+        <div className="flex h-16 items-center justify-between px-4 bg-gradient-to-r from-background to-muted/20">
+          <div className="flex items-center gap-3">
+            <div className="h-8 w-8 rounded-xl bg-slate-900 flex items-center justify-center shadow-lg dark:bg-slate-100">
+              <Cube className="h-5 w-5 text-white dark:text-slate-900" />
             </div>
-            <span className="font-semibold text-foreground text-sm">AR Interior</span>
+            <span className="font-bold text-slate-900 text-base dark:text-slate-100">AR Interior</span>
           </div>
           
           <div className="flex items-center gap-2">
             <ThemeToggle />
-            <Button
-              variant="ghost"
-              size="icon"
+            <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="h-11 w-11"
+              className="h-11 w-11 flex items-center justify-center rounded-lg hover:bg-accent transition-colors"
               aria-label="Toggle menu"
             >
               {isMenuOpen ? (
@@ -102,7 +91,7 @@ export function MobileNavigation() {
               ) : (
                 <Menu className="h-5 w-5" />
               )}
-            </Button>
+            </button>
           </div>
         </div>
       </header>
@@ -122,22 +111,20 @@ export function MobileNavigation() {
           )}
           onClick={(e) => e.stopPropagation()}
         >
-          <div className="flex h-16 items-center justify-between px-4 border-b border-border">
-            <div className="flex items-center gap-2">
-              <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
-                <Cube className="h-5 w-5 text-primary-foreground" />
+          <div className="flex h-16 items-center justify-between px-4 border-b border-border bg-gradient-to-r from-background to-muted/20">
+            <div className="flex items-center gap-3">
+              <div className="h-8 w-8 rounded-xl bg-slate-900 flex items-center justify-center shadow-lg dark:bg-slate-100">
+                <Cube className="h-5 w-5 text-white dark:text-slate-900" />
               </div>
-              <span className="font-semibold text-foreground text-sm">AR Interior</span>
+              <span className="font-bold text-slate-900 text-base dark:text-slate-100">AR Interior</span>
             </div>
-            <Button
-              variant="ghost"
-              size="icon"
+            <button
               onClick={() => setIsMenuOpen(false)}
-              className="h-11 w-11"
+              className="h-11 w-11 flex items-center justify-center rounded-lg hover:bg-accent transition-colors"
               aria-label="Close menu"
             >
               <X className="h-5 w-5" />
-            </Button>
+            </button>
           </div>
 
           <div className="py-4">
@@ -150,14 +137,21 @@ export function MobileNavigation() {
                     href={item.href}
                     onClick={() => handleNavClick(item.href, item.name)}
                     className={cn(
-                      "flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors min-h-[44px]",
+                      "flex items-center gap-4 rounded-xl px-4 py-3 text-base font-semibold transition-all duration-200 min-h-[44px] group",
                       isActive
-                        ? "bg-accent text-accent-foreground"
-                        : "text-foreground hover:bg-accent hover:text-accent-foreground",
+                        ? "bg-slate-900 text-white shadow-md scale-[1.02] border border-slate-700 dark:bg-slate-100 dark:text-slate-900 dark:border-slate-300"
+                        : "text-slate-700 hover:bg-slate-100 hover:text-slate-900 hover:scale-[1.01] hover:shadow-sm dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white",
                     )}
                   >
-                    <item.icon className="h-5 w-5 flex-shrink-0" />
-                    {item.name}
+                    <div className={cn(
+                      "flex items-center justify-center w-8 h-8 rounded-lg transition-all duration-200",
+                      isActive 
+                        ? "bg-slate-700 text-white dark:bg-slate-300 dark:text-slate-100"
+                        : "bg-muted group-hover:bg-slate-100 group-hover:text-slate-900",
+                    )}>
+                      <item.icon className="h-5 w-5" />
+                    </div>
+                    <span className="truncate">{item.name}</span>
                   </Link>
                 )
               })}
@@ -169,31 +163,6 @@ export function MobileNavigation() {
               <span className="text-sm text-muted-foreground">Theme</span>
               <ThemeToggle />
             </div>
-            {user ? (
-              <>
-                <Link href="/profile" onClick={() => setIsMenuOpen(false)}>
-                  <Button variant="ghost" className="w-full justify-start gap-3 h-11">
-                    <User className="h-5 w-5" />
-                    <span className="text-sm">Profile</span>
-                  </Button>
-                </Link>
-                <Button 
-                  variant="ghost" 
-                  className="w-full justify-start gap-3 h-11" 
-                  onClick={handleSignOut}
-                >
-                  <User className="h-5 w-5" />
-                  <span className="text-sm">Sign Out</span>
-                </Button>
-              </>
-            ) : (
-              <Link href="/auth/signin" onClick={() => setIsMenuOpen(false)}>
-                <Button variant="ghost" className="w-full justify-start gap-3 h-11">
-                  <User className="h-5 w-5" />
-                  <span className="text-sm">Sign In</span>
-                </Button>
-              </Link>
-            )}
           </div>
         </div>
       </div>
@@ -223,14 +192,21 @@ export function MobileNavigation() {
                     href={item.href}
                     onClick={() => handleNavClick(item.href, item.name)}
                     className={cn(
-                      "flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors min-h-[44px]",
+                      "flex items-center gap-4 rounded-xl px-4 py-3 text-base font-semibold transition-all duration-200 min-h-[44px] group",
                       isActive
-                        ? "bg-accent text-accent-foreground"
-                        : "text-foreground hover:bg-accent hover:text-accent-foreground",
+                        ? "bg-slate-900 text-white shadow-md scale-[1.02] border border-slate-700 dark:bg-slate-100 dark:text-slate-900 dark:border-slate-300"
+                        : "text-slate-700 hover:bg-slate-100 hover:text-slate-900 hover:scale-[1.01] hover:shadow-sm dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white",
                     )}
                   >
-                    <item.icon className="h-5 w-5 flex-shrink-0" />
-                    {item.name}
+                    <div className={cn(
+                      "flex items-center justify-center w-8 h-8 rounded-lg transition-all duration-200",
+                      isActive 
+                        ? "bg-slate-700 text-white dark:bg-slate-300 dark:text-slate-100"
+                        : "bg-slate-100 text-slate-600 group-hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-400 dark:group-hover:bg-slate-700"
+                    )}>
+                      <item.icon className="h-5 w-5" />
+                    </div>
+                    <span className="truncate">{item.name}</span>
                   </Link>
                 )
               })}

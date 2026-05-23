@@ -1,0 +1,12 @@
+# *
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+
+# Host
+Host: https://github.com/Rahul-s27/AI-Architect
+
+# Sitemaps
+Sitemap: https://github.com/Rahul-s27/AI-Architect/sitemap.xml
+Sitemap: https://github.com/Rahul-s27/AI-Architect/server-sitemap.xml

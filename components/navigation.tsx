@@ -2,7 +2,6 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Button } from "@/components/ui/button"
 import {
   Home,
   Wand2,
@@ -13,17 +12,14 @@ import {
   MessageCircle,
   Users,
   BarChart3,
-  User,
   Mountain,
   Calculator,
   Palette,
   Layout,
   Sparkles,
   IndianRupee,
-  Sun,
 } from "lucide-react"
 import { ThemeToggle } from "@/components/theme-toggle"
-import { useAuth } from "@/contexts/AuthContext"
 import { cn } from "@/lib/utils"
 
 const navigation = [
@@ -46,30 +42,25 @@ const navigation = [
 
 export function Navigation() {
   const pathname = usePathname()
-  const { user, signOut } = useAuth()
 
   const handleNavClick = (href: string, name: string) => {
     console.log("Navigation clicked:", name, "->", href)
   }
 
-  const handleSignOut = async () => {
-    await signOut()
-  }
-
   return (
-    <nav className="hidden md:block fixed left-0 top-0 z-40 h-screen w-64 bg-sidebar border-r border-sidebar-border">
+    <nav className="hidden md:block fixed left-0 top-0 z-40 h-screen w-72 bg-sidebar border-r border-sidebar-border shadow-xl">
       <div className="flex h-full flex-col">
-        <div className="flex h-16 items-center px-4 border-b border-sidebar-border">
-          <div className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
-              <Cube className="h-5 w-5 text-primary-foreground" />
+        <div className="flex h-20 items-center px-6 border-b border-sidebar-border bg-gradient-to-r from-sidebar to-sidebar-accent/20">
+          <div className="flex items-center gap-3">
+            <div className="h-10 w-10 rounded-xl bg-slate-900 flex items-center justify-center shadow-lg dark:bg-slate-100">
+              <Cube className="h-6 w-6 text-white dark:text-slate-900" />
             </div>
-            <span className="font-semibold text-sidebar-foreground text-sm">AR Interior</span>
+            <span className="font-bold text-slate-900 text-lg dark:text-slate-100">AR Interior</span>
           </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto py-2">
-          <div className="space-y-1 px-2">
+        <div className="flex-1 overflow-y-auto py-4">
+          <div className="space-y-2 px-4">
             {navigation.map((item) => {
               const isActive = pathname === item.href
               return (
@@ -78,46 +69,32 @@ export function Navigation() {
                   href={item.href}
                   onClick={() => handleNavClick(item.href, item.name)}
                   className={cn(
-                    "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                    "flex items-center gap-4 rounded-xl px-4 py-3 text-base font-semibold transition-all duration-200 group",
                     isActive
-                      ? "bg-sidebar-accent text-sidebar-accent-foreground"
-                      : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                      ? "bg-slate-900 text-white shadow-md scale-[1.02] border border-slate-700 dark:bg-slate-100 dark:text-slate-900 dark:border-slate-300"
+                      : "text-slate-700 hover:bg-slate-100 hover:text-slate-900 hover:scale-[1.01] hover:shadow-sm dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white",
                   )}
                 >
-                  <item.icon className="h-4 w-4" />
-                  {item.name}
+                  <div className={cn(
+                    "flex items-center justify-center w-8 h-8 rounded-lg transition-all duration-200",
+                    isActive
+                      ? "bg-slate-800 text-white dark:bg-slate-200 dark:text-slate-900"
+                      : "bg-slate-100 text-slate-600 group-hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-400 dark:group-hover:bg-slate-700"
+                  )}>
+                    <item.icon className="h-5 w-5" />
+                  </div>
+                  <span className="truncate">{item.name}</span>
                 </Link>
               )
             })}
           </div>
         </div>
 
-        <div className="border-t border-sidebar-border p-2 space-y-2">
+        <div className="border-t border-sidebar-border p-4 space-y-3 bg-gradient-to-t from-sidebar-accent/10 to-transparent">
           <div className="flex items-center justify-between px-2">
-            <span className="text-xs text-muted-foreground">Theme</span>
+            <span className="text-sm font-medium text-muted-foreground">Theme</span>
             <ThemeToggle />
           </div>
-          {user ? (
-            <>
-              <Link href="/profile">
-                <Button variant="ghost" className="w-full justify-start gap-3">
-                  <User className="h-4 w-4" />
-                  <span className="text-sm">Profile</span>
-                </Button>
-              </Link>
-              <Button variant="ghost" className="w-full justify-start gap-3" onClick={handleSignOut}>
-                <User className="h-4 w-4" />
-                <span className="text-sm">Sign Out</span>
-              </Button>
-            </>
-          ) : (
-            <Link href="/auth/signin">
-              <Button variant="ghost" className="w-full justify-start gap-3">
-                <User className="h-4 w-4" />
-                <span className="text-sm">Sign In</span>
-              </Button>
-            </Link>
-          )}
         </div>
       </div>
     </nav>

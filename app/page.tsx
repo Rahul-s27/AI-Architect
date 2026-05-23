@@ -1,5 +1,5 @@
-import StartingPage from './StartingPage'
+import { redirect } from 'next/navigation'
 
 export default function HomePage() {
-  return <StartingPage />
+  redirect('/dashboard')
 }
